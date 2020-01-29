@@ -6,8 +6,7 @@
     "start": "bsb -make-world -w",
     "clean": "bsb -clean-world",
     "test": "yarn build && jest",
-    "test:coverage": "yarn build && jest --coverage",
-    "test:coveralls": "yarn build && jest --coverage --coverageReporters=text-lcov"
+    "test:coverage": "yarn build && jest --coverage"
   },
   "keywords": [
     "BuckleScript",

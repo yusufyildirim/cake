@@ -1,15 +1,14 @@
-name: Test CI
+name: Tests
 
 on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x]
+        node-version: [12.x]
 
     steps:
       - name: "Clone repository"
@@ -24,8 +23,8 @@ jobs:
         run: yarn install
 
       - name: "Run tests"
-        run: yarn test:coveralls
-      
+        run: yarn test:coverage
+
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:
