@@ -1,4 +1,4 @@
-type value = Int(int) | String(string) | Bool(bool);
+type value = Int(int) | Float(float) | String(string) | Bool(bool) | Null;
 type operator = 
 | Eq(value)
 | NotEq(value)

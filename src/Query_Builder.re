@@ -1,6 +1,6 @@
 open Query_Statement;
 
-let select = Select.empty
+let select = Select.empty;
 
 let from = (t, table) => switch t {
 | Select(r) => Select({...r, from: `From(Some(table))})
@@ -18,18 +18,9 @@ let columns = (t, columns) => switch t {
 
 let where = (t: Query_Statement.t, column: string, operator: Query_Expression.operator) => {
   switch t {
-  | Select(r) => {
-      let `Where(expressions) = r.where;
-      Select({ ...r, where: `Where([ Query_Expression.Single(column, operator),  ...expressions])});
-    }
-  | Update(r) => {
-      let `Where(expressions) = r.where;
-      Update({ ...r, where: `Where([ Query_Expression.Single(column, operator),  ...expressions])});
-    }
-  | Delete(r) => {
-      let `Where(expressions) = r.where;
-      Delete({ ...r, where: `Where([ Query_Expression.Single(column, operator),  ...expressions])});
-    }
+  | Select({ where: `Where(expressions) } as st) => Select({ ...st, where: `Where([ Query_Expression.Single(column, operator),  ...expressions])});
+  | Update({ where: `Where(expressions) } as st) => Update({ ...st, where: `Where([ Query_Expression.Single(column, operator),  ...expressions])});
+  | Delete({ where: `Where(expressions) } as st) => Delete({ ...st, where: `Where([ Query_Expression.Single(column, operator),  ...expressions])});
   | Insert(_) => t;
   };
 }

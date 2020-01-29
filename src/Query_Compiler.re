@@ -3,11 +3,13 @@ module QU = Query_Utils;
 
 let compileValue = fun
 | Int(v) => string_of_int(v)
+| Float(v) => Js.Float.toString(v)
 | String(v) => QU.quote(v)
 | Bool(v) => string_of_bool(v)
+| Null => "NULL";
 
 let compileOperator = fun
-| Eq(value) => "=" ++ compileValue(value)
+| Eq(value) => "= " ++ compileValue(value)
 | NotEq(value) => "<> " ++ compileValue(value)
 | GreaterThan(value) => "> " ++ compileValue(value)
 | LessThan(value) => "< " ++ compileValue(value)
