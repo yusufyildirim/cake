@@ -1,5 +1,7 @@
 # Cake
-Easy and fun to use query builder written in Reason. Inspired by [knex.js](http://knexjs.org/)
+[![Coverage Status](https://coveralls.io/repos/github/ttinythings/cake/badge.svg?branch=master)](https://coveralls.io/github/ttinythings/cake?branch=master)
+[![Dependencies Status](https://david-dm.org/ttinythings/cake.svg)](https://david-dm.org/ttinythings/cake)
+> Easy and fun to use query builder written in Reason. Inspired by [knex.js](http://knexjs.org/)
 
 ## What and Why?
 Reason community needs a non-verbose, easy to use, modular query builder. This project aims to fill that void but for now, it is experimental.
