@@ -5,7 +5,9 @@
     "build": "bsb -make-world",
     "start": "bsb -make-world -w",
     "clean": "bsb -clean-world",
-    "test": "yarn build && jest --coverage"
+    "test": "yarn build && jest",
+    "test:coverage": "yarn build && jest --coverage",
+    "test:coveralls": "yarn build && jest --coverage --coverageReporters=text-lcov"
   },
   "keywords": [
     "BuckleScript",
@@ -19,8 +21,12 @@
     "bsconfig.json"
   ],
   "jest": {
-    "collectCoverageFrom": [ "lib/js/**/*.{bs.js,js}" ],
-    "coveragePathIgnorePatterns": [ "lib/js/src/Cake.bs.js" ]
+    "collectCoverageFrom": [
+      "lib/js/**/*.{bs.js,js}"
+    ],
+    "coveragePathIgnorePatterns": [
+      "lib/js/src/Cake.bs.js"
+    ]
   },
   "devDependencies": {
     "@glennsl/bs-jest": "^0.4.9",
