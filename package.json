@@ -1,0 +1,29 @@
+{
+  "name": "cake",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "bsb -make-world",
+    "start": "bsb -make-world -w",
+    "clean": "bsb -clean-world",
+    "test": "yarn build && jest --coverage"
+  },
+  "keywords": [
+    "BuckleScript",
+    "Reason",
+    "Query Builder"
+  ],
+  "author": "tinythings",
+  "license": "MIT",
+  "files": [
+    "src/",
+    "bsconfig.json"
+  ],
+  "jest": {
+    "collectCoverageFrom": [ "lib/js/**/*.{bs.js,js}" ],
+    "coveragePathIgnorePatterns": [ "lib/js/src/Cake.bs.js" ]
+  },
+  "devDependencies": {
+    "@glennsl/bs-jest": "^0.4.9",
+    "bs-platform": "7.0.1"
+  }
+}

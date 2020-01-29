@@ -1,0 +1,16 @@
+{
+  "name": "cake",
+  "sources": [
+    { "dir" : "src", "subdirs" : true },
+    { "dir": "__tests__", "subdirs" : true, "type": "dev" }
+  ],
+  "bsc-flags": ["-bs-super-errors", "-bs-no-version-header", "-open Belt"],
+  "package-specs": [{
+    "module": "commonjs"
+  }],
+  "suffix": ".bs.js",
+  "namespace": false,
+  "bs-dependencies": [],
+  "bs-dev-dependencies": ["@glennsl/bs-jest"],
+  "refmt": 3
+}
