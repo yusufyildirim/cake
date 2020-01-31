@@ -6,7 +6,7 @@
 _esy
 dist
 npm-debug.log
-/lib/bs/
+/lib
 /node_modules/
 /bundleOutput/
 coverage/
