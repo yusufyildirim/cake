@@ -8,6 +8,9 @@
   "package-specs": [{
     "module": "commonjs"
   }],
+  "warnings": {
+    "number": "-44"
+  },
   "suffix": ".bs.js",
   "namespace": false,
   "bs-dependencies": [],

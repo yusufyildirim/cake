@@ -1,28 +1,12 @@
 open Query_Clause;
 
-type select = { columns, from, where, limit };
-type insert = { table: string };
-type update = { table: string, where: Query_Clause.where };
-type delete = { table: string, where: Query_Clause.where };
+type select = { columns: t(columns), from: t(from), where: t(where), limit: t(limit) };
+type insert = { into: t(into) };
+type update = { table: t(table), where: t(where) };
+type delete = { from: t(from), where: t(where) };
 
-type t = | Select(select) | Insert(insert) | Update(update) | Delete(delete);
-
-module Select {
-  let statement = { columns: `Columns([]), from: `From(None), where: `Where([]), limit: `Limit(None) };
-  let empty =  Select(statement);
-}
-
-module Insert {
-  let statement = { table: "" };
-  let empty =  Insert(statement);
-}
-
-module Update {
-  let statement: update = { table: "", where: `Where([]) };
-  let empty =  Update(statement);
-}
-
-module Delete {
-  let statement: delete = { table: "", where: `Where([]) };
-  let empty =  Delete(statement);
-}
+type t('a) = 
+| Select(select): t(select)
+| Insert(insert): t(insert)
+| Update(update): t(update)
+| Delete(delete): t(delete);

@@ -1,69 +1,47 @@
 open Jest;
+open Cake.Builder;
 open Query_Statement;
-open Query_Builder;
 open Query_Expression;
+open Query_Clause;
 
-let selectStatement = Query_Statement.Select.statement;
-let select = Query_Statement.Select.empty;
-let insertStatement = Query_Statement.Insert.statement;
-let insert = Query_Statement.Insert.empty;
-let updateStatement = Query_Statement.Update.statement;
-let update = Query_Statement.Update.empty;
-let deleteStatement = Query_Statement.Delete.statement;
-let delete = Query_Statement.Delete.empty;
+let table = "category"
+let col = "col";
+let eqExpr = Single(Eq(col, String("value")));
+let cols = ["col1", "col2"];
+let number = 88;
+let whereClause = Where([ eqExpr ])
+let whereClause2 = Where([ eqExpr, eqExpr ]);
 
-
-describe("QB constructors", () => {
+describe("Select", () => {
   open Expect;
+  open Select;
 
-  test("select", () => expect(select) |> toEqual(Query_Statement.Select.empty));
+  test("from", () => expect( from(table) ) |> toEqual( Select({ ...statement, from: From(Some(table)) }) ));
+  test("where", () => expect( empty -> where([ eqExpr ]) ) |> toEqual( Select({ ...statement, where: whereClause }) ));
+  test("where multi", () => expect( empty -> where([ eqExpr ]) -> where([ eqExpr ]) ) |> toEqual( Select({ ...statement, where: whereClause2 }) ));
+  test("columns", () => expect( empty -> columns(cols) ) |> toEqual( Select({...statement, columns: Columns(cols)}) ));
+  test("limit", () => expect( empty -> limit(number) ) |> toEqual( Select({...statement, limit: Limit(Some(number))}) ));
 });
 
-describe("from", () => {
+describe("Insert", () => {
   open Expect;
-  let table = "tableName";
+  open Insert;
 
-  test("from :select", () => expect(select -> from(table)) |> toEqual(Select({...selectStatement, from: `From(Some(table))})))
-  test("from :update", () => expect(update -> from(table)) |> toEqual(update))
-  test("from :delete", () => expect(delete -> from(table)) |> toEqual(delete))
-  test("from :insert", () => expect(insert -> from(table)) |> toEqual(insert))
+  test("into", () => expect( into(table) ) |> toEqual( Insert({ ...statement, into: Into(Some(table)) }) ));
 });
 
-describe("columns", () => {
+describe("Update", () => {
   open Expect;
-  let cols = ["col1", "col2"];
+  open Update;
 
-  test("columns :select", () => expect(select -> columns(cols)) |> toEqual(Select({...selectStatement, columns: `Columns(cols)})))
-  test("columns :update", () => expect(update -> columns(cols)) |> toEqual(update))
-  test("columns :delete", () => expect(delete -> columns(cols)) |> toEqual(delete))
-  test("columns :insert", () => expect(insert -> columns(cols)) |> toEqual(insert))
+  test("where", () => expect( empty -> where([ eqExpr ]) ) |> toEqual( Update({...statement, where: whereClause}) ));
+  test("where multi", () => expect( empty -> where([ eqExpr ]) -> where([ eqExpr ]) ) |> toEqual( Update({ ...statement, where: whereClause2 }) ));
 });
 
-describe("where", () => {
+describe("Delete", () => {
   open Expect;
+  open Delete;
 
-  let col = "col";
-  let op = Eq(String("value"));
-  let whereClause = `Where([ Single(col, op)])
-  let whereClause2 = `Where([ Single(col, op), Single(col, op)])
-
-  test("where :select", () => expect(select -> where(col, op)) |> toEqual(Select({ ...selectStatement, where: whereClause })))
-  test("where :update", () => expect(update -> where(col, op)) |> toEqual(Update({ ...updateStatement, where: whereClause })))
-  test("where :delete", () => expect(delete -> where(col, op)) |> toEqual(Delete({ ...deleteStatement, where: whereClause })))
-  test("insert :insert", () => expect(insert -> where(col, op)) |> toEqual(insert))
-
-  test("where multiple :select", () => expect(select -> where(col, op) -> where(col, op)) |> toEqual(Select({ ...selectStatement, where: whereClause2 })))
-  test("where multiple :update", () => expect(update -> where(col, op) -> where(col, op)) |> toEqual(Update({ ...updateStatement, where: whereClause2 })))
-  test("where multiple :delete", () => expect(delete -> where(col, op) -> where(col, op)) |> toEqual(Delete({ ...deleteStatement, where: whereClause2 })))
-  test("insert multiple :insert", () => expect(insert -> where(col, op) -> where(col, op)) |> toEqual(insert))
+  test("where", () => expect( empty -> where([ eqExpr ]) ) |> toEqual( Delete({...statement, where: whereClause}) ));
+  test("where multi", () => expect( empty -> where([ eqExpr ]) -> where([ eqExpr ]) ) |> toEqual( Delete({ ...statement, where: whereClause2 }) ));
 });
-
-describe("limit", () => {
-  open Expect;
-  let number = 99;
-
-  test("limit :select", () => expect(select -> limit(number)) |> toEqual(Select({...selectStatement, limit: `Limit(Some(number))})))
-  test("limit :update", () => expect(update -> limit(number)) |> toEqual(update))
-  test("limit :delete", () => expect(delete -> limit(number)) |> toEqual(delete))
-  test("limit :insert", () => expect(insert -> limit(number)) |> toEqual(insert))
-})

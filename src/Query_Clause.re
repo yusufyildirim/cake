@@ -1,5 +1,15 @@
-// TODO: I'm not sure about this. There has to be a better way to manage these types. Using polyvariants is kinda pointless right now.
-type columns = [ `Columns(list(string)) ];
-type from = [ `From(option(string)) ];
-type where = [ `Where(list(Query_Expression.t)) ];
-type limit = [ `Limit(option(int)) ];
+// https://stackoverflow.com/questions/33093807/how-to-use-gadts-across-modules-in-ocaml-without-raising-warnings
+type table = pri | Table;
+type from = pri | From;
+type into = pri | Into;
+type columns = pri | Columns;
+type where = pri | Where;
+type limit = pri | Limit;
+
+type t('a) =
+| Table(option(string)): t(table)
+| Columns(list(string)): t(columns)
+| From(option(string)): t(from)
+| Into(option(string)): t(into)
+| Where(list(Query_Expression.t)): t(where)
+| Limit(option(int)): t(limit); 

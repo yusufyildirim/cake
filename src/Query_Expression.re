@@ -1,14 +1,13 @@
 type value = Int(int) | Float(float) | String(string) | Bool(bool) | Null;
 type operator = 
-| Eq(value)
-| NotEq(value)
-| GreaterThan(value)
-| LessThan(value)
-| GreaterThanOrEqual(value)
-| LessThanOrEqual(value)
-| Between(value, value)
-| Like(value)
-| In(list(value));
+| Eq(string, value)
+| NotEq(string, value)
+| GreaterThan(string, value)
+| LessThan(string, value)
+| GreaterThanOrEqual(string, value)
+| LessThanOrEqual(string, value)
+| Between(string, value, value)
+| Like(string, value)
+| In(string, list(value));
 
-type compositionOperator =  And | Or | Not;
-type t = Single(string, operator) | Compose(t, compositionOperator, t);
+type t = Single(operator) | And(list(t)) | Or(list(t));
