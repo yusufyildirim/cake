@@ -21,13 +21,15 @@ describe("Select", () => {
   test("where multi", () => expect( empty -> where([ eqExpr ]) -> where([ eqExpr ]) ) |> toEqual( Select({ ...statement, where: whereClause2 }) ));
   test("columns", () => expect( empty -> columns(cols) ) |> toEqual( Select({...statement, columns: Columns(cols)}) ));
   test("limit", () => expect( empty -> limit(number) ) |> toEqual( Select({...statement, limit: Limit(Some(number))}) ));
+  test("orderBy", () => expect( empty -> orderBy([("id", Asc)]) ) |> toEqual( Select({...statement, orderBy: OrderBy([("id", Asc)])}) ));
+  test("groupBy", () => expect( empty -> groupBy(["category"]) ) |> toEqual( Select({...statement, groupBy: GroupBy(["category"])}) ));
 });
 
 describe("Insert", () => {
   open Expect;
   open Insert;
 
-  test("into", () => expect( into(table) ) |> toEqual( Insert({ ...statement, into: Into(Some(table)) }) ));
+  test("into", () => expect( into(table) ) |> toEqual( Insert({ into: Into(Some(table)) }) ));
 });
 
 describe("Update", () => {

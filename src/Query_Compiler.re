@@ -12,6 +12,10 @@ let valueToString = fun
 | Bool(v) => string_of_bool(v)
 | Null => "NULL";
 
+let orderDirectionToString = fun
+| Asc => "ASC"
+| Desc => "DESC";
+
 let operator = fun
 | Eq(col, value) => col ++ " = " ++ valueToString(value)
 | NotEq(col, value) => col ++ " <> " ++ valueToString(value)
@@ -23,7 +27,6 @@ let operator = fun
 | Like(col, value) => col ++ " LIKE " ++ valueToString(value)
 | In(col, _values) => col ++ "IN :TODO";
 
-
 let rec expression = fun
 | Single(op) => operator(op)
 | And(ops) => "AND (" ++ List.map(ops, expression) -> QU.joinWithSpace ++ ")" 
@@ -31,7 +34,7 @@ let rec expression = fun
 
 let columns = fun
 | Columns([]) => "*"
-| Columns(columns) => List.map(columns, QU.quote) -> QU.joinWithComma;
+| Columns(columns) => columns -> QU.joinWithComma;
 
 let from = fun
 | From(None) => ""
@@ -46,54 +49,17 @@ let where = fun
   ] -> QU.joinWithSpace;
 };
 
-let select = (statement: Query_Statement.select) =>
-  [
-    "SELECT",
-    columns(statement.columns),
-    from(statement.from),
-    where(statement.where),
-    // limit(statement.limit),
-  ] -> QU.joinWithSpace;
-
-let insert = (_statement) => "";
-
-let update = (_statement) => "";
-
-let delete = (_statement) => "";
-
-let toSQL: type v. Query_Statement.t(v) => string = (statement) => {
-  open Query_Statement;
-
-  switch statement {
-  | Select(st) => select(st)
-  | Insert(st) => insert(st)
-  | Update(st) => update(st)
-  | Delete(st) => delete(st)
-  };
-}
-
-/*
-open Query_Expression;
-module QU = Query_Utils;
-
-let where = fun
-| `Where([]) => ""
-| `Where(expressions) =>  {
-  [
-    "WHERE",
-    expressions
-    -> List.map(fun
-        | Single(column, op) => [column, compileOperator(op)] -> QU.joinWithSpace
-        | Compose(_expr1, _composeOp, _expr2) => ":TODO"
-      )
-    -> QU.joinWithAnd
-  ] -> QU.joinWithSpace;
-};
-
 let limit = fun
-| `Limit(None) => ""
-| `Limit(Some(number)) => ["LIMIT", string_of_int(number)] -> QU.joinWithSpace;
+| Limit(None) => ""
+| Limit(Some(number)) => ["LIMIT", string_of_int(number)] -> QU.joinWithSpace;
 
+let groupBy = fun
+| GroupBy([]) => ""
+| GroupBy(list) => ["GROUP BY", QU.joinWithComma(list)] -> QU.joinWithSpace;
+
+let orderBy = fun
+| OrderBy([]) => ""
+| OrderBy(list) => "ORDER BY " ++ (List.map(list, ((col, direction)) => col ++ " " ++ orderDirectionToString(direction)) -> QU.joinWithComma);
 
 let select = (statement: Query_Statement.select) =>
   [
@@ -102,26 +68,24 @@ let select = (statement: Query_Statement.select) =>
     from(statement.from),
     where(statement.where),
     limit(statement.limit),
-  ] -> QU.joinWithSpace;
+    groupBy(statement.groupBy),
+    orderBy(statement.orderBy),
+  ]
+  -> QU.joinWithSpace;
 
-let insert = (_statement) => {
-  ""
-}
+/*let insert = (_statement) => "";
 
-let update = (_statement) => {
-  ""
-}
+let update = (_statement) => "";
 
-let delete = (_statement) => {
-  ""
-}
-*/
-/*
-let compile = (statement: Query_Statement.t) => {
+let delete = (_statement) => "";*/
+
+let toSQL: type v. Query_Statement.t(v) => string = (statement) => {
+  open Query_Statement;
+
   switch statement {
   | Select(st) => select(st)
-  | Insert(st) => insert(st)
-  | Update(st) => update(st)
-  | Delete(st) => delete(st)
+  | Insert(_st) => "" //insert(st)
+  | Update(_st) => "" //update(st)
+  | Delete(_st) => "" //delete(st)
   };
-}*/
+}

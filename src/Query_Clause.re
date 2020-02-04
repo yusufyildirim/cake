@@ -5,6 +5,11 @@ type into = pri | Into;
 type columns = pri | Columns;
 type where = pri | Where;
 type limit = pri | Limit;
+type groupBy = pri | GroupBy;
+type orderBy = pri | OrderBy;
+
+type orderDirection = Asc | Desc;
+type orderRule = (string, orderDirection);
 
 type t('a) =
 | Table(option(string)): t(table)
@@ -12,4 +17,6 @@ type t('a) =
 | From(option(string)): t(from)
 | Into(option(string)): t(into)
 | Where(list(Query_Expression.t)): t(where)
-| Limit(option(int)): t(limit); 
+| Limit(option(int)): t(limit)
+| GroupBy(list(string)): t(groupBy)
+| OrderBy(list(orderRule)): t(orderBy);
