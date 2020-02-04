@@ -15,35 +15,12 @@ let or_ = (l1, l2) => List.concat(l1, [Or(l2)]);
 
 let (==) = equal;
 let (!=) = notEqual;
+let (>) = greaterThan;
+let (<) = lessThan;
+let (>=) = greaterThanOrEqual;
+let (<=) = lessThanOrEqual;
+let (><) = between;
+let (??) = like;
+let (>|<) = in_;
 let (&&) = and_;
 let (||) = or_;
-
-/*
-  where("id", Eq(Int(5)))
-  -> where(eq("id", Int(5)))
-  -> where(eq("id", Int(5)) -> and_(eq("id", "")))
-  -> where(
-    eq("name", String("Shirts"))
-    -> and(
-      in("name", [ String("Sweatshirts"), String("Hoodies") ])
-      -> or(
-        eq("mehmet", String("ali"))
-      )
-    )
-  );
-
-  // With infix operators
-  where(
-    "name" == String("Shirts")
-    && ( "name" -> in_([ String("Sweatshirts"), String("Hoodies") ]) || "mehmet" == String("ali"))
-    )
-
-  // Obj Represantation
-  [
-    Single("ali", Eq( "veli")),
-    And([
-      Single("ali", Eq( "veli")),
-      Single("ali", Eq( "veli"))
-    ])
-  ]
-*/
