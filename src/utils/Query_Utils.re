@@ -4,3 +4,4 @@ let joinWithAnd = (list: list(string)) => list -> keepNonEmpty |> String.concat(
 let joinWithOr = (list: list(string)) => list -> keepNonEmpty |> String.concat(" OR ");
 let joinWithComma = (list: list(string)) => list -> keepNonEmpty |> String.concat(", ");
 let quote = s => "\"" ++ s ++"\"";
+let wrapWithParantheses = s => "(" ++ s ++")";

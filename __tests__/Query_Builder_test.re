@@ -29,7 +29,10 @@ describe("Insert", () => {
   open Expect;
   open Insert;
 
-  test("into", () => expect( into(table) ) |> toEqual( Insert({ into: Into(Some(table)) }) ));
+  test("into", () => expect( into(table) ) |> toEqual( Insert({ ...statement, into: Into(Some(table)) }) ));
+  test("columns", () => expect( empty -> columns([ "name" ]) ) |> toEqual( Insert({ ...statement, columns: Columns([ "name" ]) }) ));
+  test("values", () => expect( empty -> values([ [String("John")] ]) ) |> toEqual( Insert({ ...statement, values: Values([ [String("John")] ]) }) ));
+  
 });
 
 describe("Update", () => {

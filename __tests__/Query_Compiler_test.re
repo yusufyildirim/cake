@@ -47,6 +47,13 @@ describe("Query Compiler :unit", () => {
 
   test("orderBy: empty", () => expect( orderBy(OrderBy([])) ) |> toBe(""));
   test("orderBy", () => expect( orderBy(OrderBy([ ("col", Asc), ("otherCol", Desc) ])) ) |> toBe("ORDER BY col ASC, otherCol DESC"));
+
+  // INSERT
+  test("into :empty", () => expect( into(Into(None)) ) |> toBe(""));
+  test("into", () => expect( into(Into(Some("table"))) ) |> toBe("INTO table"));
+
+  test("values :empty", () => expect( values(Values([])) ) |> toBe(""));
+  test("values", () => expect( values(Values([ [String("John"), Int(24)] ])) ) |> toBe("VALUES (\"John\", 24)"));
 });
 
 
@@ -152,5 +159,36 @@ describe("Query Compiler :integration", () => {
       -> Query_Compiler.toSQL
 
     expect(query) |> toBe("SELECT * FROM category WHERE shipment_method = \"UPS\" AND (name = \"John\" OR (surname = \"Doe\"))");
+  });
+  
+  test("INSERT", () => {
+    open QB;
+    let query = 
+      Insert.(
+        into("user")
+        -> columns(["name", "age"])
+        -> values([
+          [String("Yusuf"), Int(18)],
+        ])
+      )
+      -> Query_Compiler.toSQL
+
+    expect(query) |> toBe("INSERT INTO user (name, age) VALUES (\"Yusuf\", 18)");
+  });
+
+  test("INSERT 2", () => {
+    open QB;
+    let query = 
+      Insert.(
+        into("user")
+        -> columns(["name", "age"])
+        -> values([
+          [String("Yusuf"), Int(24)],
+          [String("John"), Int(43)],
+        ])
+      )
+      -> Query_Compiler.toSQL
+
+    expect(query) |> toBe("INSERT INTO user (name, age) VALUES (\"Yusuf\", 24), (\"John\", 43)");
   });
 })

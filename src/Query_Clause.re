@@ -7,6 +7,7 @@ type where = pri | Where;
 type limit = pri | Limit;
 type groupBy = pri | GroupBy;
 type orderBy = pri | OrderBy;
+type values = pri | Values;
 
 type orderDirection = Asc | Desc;
 type orderRule = (string, orderDirection);
@@ -19,4 +20,5 @@ type t('a) =
 | Where(list(Query_Expression.t)): t(where)
 | Limit(option(int)): t(limit)
 | GroupBy(list(string)): t(groupBy)
-| OrderBy(list(orderRule)): t(orderBy);
+| OrderBy(list(orderRule)): t(orderBy)
+| Values(list(list(Query_Expression.value))): t(values);

@@ -61,6 +61,17 @@ let orderBy = fun
 | OrderBy([]) => ""
 | OrderBy(list) => "ORDER BY " ++ (List.map(list, ((col, direction)) => col ++ " " ++ orderDirectionToString(direction)) -> QU.joinWithComma);
 
+// INSERT
+let into = fun
+| Into(None) => ""
+| Into(Some(table)) => ["INTO", table] -> QU.joinWithSpace;
+
+let row = list => List.map(list, valueToString) -> QU.joinWithComma -> QU.wrapWithParantheses;
+
+let values = fun
+| Values([]) => ""
+| Values(list) => ["VALUES", List.map(list, row) -> QU.joinWithComma] -> QU.joinWithSpace;
+
 let select = (statement: Query_Statement.select) =>
   [
     "SELECT",
@@ -73,9 +84,16 @@ let select = (statement: Query_Statement.select) =>
   ]
   -> QU.joinWithSpace;
 
-/*let insert = (_statement) => "";
+let insert = (statement: Query_Statement.insert) =>
+  [
+    "INSERT",
+    into(statement.into),
+    columns(statement.columns) -> QU.wrapWithParantheses,
+    values(statement.values),
+  ]
+  -> QU.joinWithSpace;
 
-let update = (_statement) => "";
+/*let update = (_statement) => "";
 
 let delete = (_statement) => "";*/
 
@@ -84,7 +102,7 @@ let toSQL: type v. Query_Statement.t(v) => string = (statement) => {
 
   switch statement {
   | Select(st) => select(st)
-  | Insert(_st) => "" //insert(st)
+  | Insert(st) => insert(st)
   | Update(_st) => "" //update(st)
   | Delete(_st) => "" //delete(st)
   };

@@ -8,7 +8,7 @@ type select = {
   orderBy: t(orderBy),
   groupBy: t(groupBy),
 };
-type insert = { into: t(into) };
+type insert = { into: t(into), columns: t(columns), values: t(values) };
 type update = { table: t(table), where: t(where) };
 type delete = { from: t(from), where: t(where) };
 
